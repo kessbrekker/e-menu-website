@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menü Kontrol Paneli</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 0; }
+        h1 { text-align: center; color: #b22222; margin-top: 2rem; }
+        .menu-table { width: 90%; max-width: 900px; margin: 2rem auto; border-collapse: collapse; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        th, td { border: 1px solid #e0e0e0; padding: 0.7rem 0.5rem; text-align: left; }
+        th { background: #f3e9e1; color: #b22222; }
+        tr:nth-child(even) { background: #faf7f2; }
+        .img-preview { width: 60px; height: 40px; object-fit: cover; border-radius: 5px; }
+        .kategori-baslik { background: #b22222; color: #fff; font-weight: bold; text-align: center; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+    <h1>Menü Kontrol Paneli</h1>
+    <div style="text-align:center; margin-bottom:1rem;">
+        <button id="tumunu-kaydet-btn" style="padding:0.6rem 1.5rem; font-size:1.1rem; background:#b22222; color:#fff; border:none; border-radius:6px; cursor:pointer;">Tümünü Kaydet</button>
+        <span id="kaydet-bilgi" style="margin-left:1rem; color:#b22222;"></span>
+    </div>
+    <div id="menu-table-container">
+        <p>Menü verileri yükleniyor...</p>
+    </div>
+    <script>
+    // Menü verilerini tablo olarak gösteren fonksiyon
+    async function menuKontrol() {
+        const container = document.getElementById('menu-table-container');
+        try {
+            const res = await fetch('menu.json');
+            const data = await res.json();
+            let html = '';
+            Object.keys(data).forEach(kategori => {
+                html += `<table class='menu-table'>`;
+                html += `<tr><td colspan='5' class='kategori-baslik'>${kategori}</td></tr>`;
+                html += `<tr><th>Ürün Adı</th><th>Açıklama</th><th>Fiyat</th><th>Resim</th><th>Düzenle</th></tr>`;
+                data[kategori].forEach((urun, urunIndex) => {
+                    html += `<tr data-kategori='${kategori}' data-index='${urunIndex}'>`;
+                    html += `<td class='td-isim'>${urun.isim}</td>`;
+                    html += `<td class='td-aciklama'>${urun.aciklama}</td>`;
+                    html += `<td class='td-fiyat'>${urun.fiyat}₺</td>`;
+                    html += `<td class='td-resim'>${urun.resim ? `<img src='${urun.resim}' class='img-preview' alt='${urun.isim}'>` : '-'}</td>`;
+                    html += `<td class='td-duzenle'><button class='duzenle-btn'>Düzenle</button></td>`;
+                    html += `</tr>`;
+                });
+                html += `</table>`;
+            });
+            container.innerHTML = html;
+        } catch (e) {
+            container.innerHTML = '<p>Menü verileri yüklenemedi.</p>';
+        }
+    }
+    menuKontrol();
+
+    // Tabloya düzenleme işlevi ekle
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('duzenle-btn')) {
+            const tr = e.target.closest('tr');
+            const tdIsim = tr.querySelector('.td-isim');
+            const tdAciklama = tr.querySelector('.td-aciklama');
+            const tdFiyat = tr.querySelector('.td-fiyat');
+            const tdResim = tr.querySelector('.td-resim');
+            const tdDuzenle = tr.querySelector('.td-duzenle');
+            // Eski değerleri sakla
+            const eski = {
+                isim: tdIsim.textContent,
+                aciklama: tdAciklama.textContent,
+                fiyat: tdFiyat.textContent.replace('₺','').trim(),
+                resim: tdResim.querySelector('img') ? tdResim.querySelector('img').src : ''
+            };
+            // Inputlara çevir
+            tdIsim.innerHTML = `<input type='text' value='${eski.isim}'>`;
+            tdAciklama.innerHTML = `<input type='text' value='${eski.aciklama}'>`;
+            tdFiyat.innerHTML = `<input type='number' value='${eski.fiyat}' min='0'> ₺`;
+            tdResim.innerHTML = `<input type='text' value='${eski.resim}' placeholder='Resim yolu'>`;
+            tdDuzenle.innerHTML = `<button class='kaydet-btn'>Kaydet</button> <button class='iptal-btn'>İptal</button>`;
+            // İptal ve Kaydet işlevleri
+            tdDuzenle.querySelector('.iptal-btn').onclick = function() {
+                tdIsim.textContent = eski.isim;
+                tdAciklama.textContent = eski.aciklama;
+                tdFiyat.textContent = eski.fiyat + '₺';
+                tdResim.innerHTML = eski.resim ? `<img src='${eski.resim}' class='img-preview' alt='${eski.isim}'>` : '-';
+                tdDuzenle.innerHTML = `<button class='duzenle-btn'>Düzenle</button>`;
+            };
+            tdDuzenle.querySelector('.kaydet-btn').onclick = function() {
+                const yeniIsim = tdIsim.querySelector('input').value;
+                const yeniAciklama = tdAciklama.querySelector('input').value;
+                const yeniFiyat = tdFiyat.querySelector('input').value;
+                const yeniResim = tdResim.querySelector('input').value;
+                tdIsim.textContent = yeniIsim;
+                tdAciklama.textContent = yeniAciklama;
+                tdFiyat.textContent = yeniFiyat + '₺';
+                tdResim.innerHTML = yeniResim ? `<img src='${yeniResim}' class='img-preview' alt='${yeniIsim}'>` : '-';
+                tdDuzenle.innerHTML = `<button class='duzenle-btn'>Düzenle</button>`;
+            };
+        }
+    });
+
+    // Tümünü Kaydet butonuna tıklanınca ekrandaki verileri toplayıp backend'e gönder
+    document.getElementById('tumunu-kaydet-btn').onclick = async function() {
+        const bilgi = document.getElementById('kaydet-bilgi');
+        bilgi.textContent = '';
+        // Tabloyu tara ve güncel menü verisini oluştur
+        const tables = document.querySelectorAll('.menu-table');
+        const menuData = {};
+        tables.forEach(table => {
+            const kategori = table.querySelector('.kategori-baslik').textContent;
+            menuData[kategori] = [];
+            const rows = table.querySelectorAll('tr');
+            for (let i = 2; i < rows.length; i++) { // ilk 2 satır başlık
+                const tds = rows[i].querySelectorAll('td');
+                if (tds.length < 5) continue;
+                const isim = tds[0].querySelector('input') ? tds[0].querySelector('input').value : tds[0].textContent;
+                const aciklama = tds[1].querySelector('input') ? tds[1].querySelector('input').value : tds[1].textContent;
+                let fiyat = tds[2].querySelector('input') ? tds[2].querySelector('input').value : tds[2].textContent;
+                fiyat = fiyat.replace('₺','').trim();
+                const resim = tds[3].querySelector('input') ? tds[3].querySelector('input').value : (tds[3].querySelector('img') ? tds[3].querySelector('img').getAttribute('src') : '');
+                menuData[kategori].push({isim, aciklama, fiyat: Number(fiyat), resim});
+            }
+        });
+        // Backend'e gönder
+        try {
+            const res = await fetch('http://localhost:3000/menu-update', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(menuData)
+            });
+            const result = await res.json();
+            if (result.success) {
+                bilgi.textContent = 'Menü başarıyla kaydedildi!';
+            } else {
+                bilgi.textContent = 'Kaydetme başarısız.';
+            }
+        } catch (e) {
+            bilgi.textContent = 'Sunucuya bağlanılamadı!';
+        }
+    };
+    </script>
+</body>
+</html> 

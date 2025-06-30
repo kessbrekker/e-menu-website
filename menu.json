@@ -1,0 +1,52 @@
+{
+  "Çorbalar": [
+    {
+      "isim": "Mercimek Çorbası",
+      "aciklama": "Klasik kırmızı mercimek çorbası",
+      "fiyat": 140,
+      "resim": "http://localhost:3000/img/mercimek.jpg"
+    },
+    {
+      "isim": "Ezogelin Çorbası",
+      "aciklama": "Bulgur ve baharatlarla zenginleştirilmiş",
+      "fiyat": 40,
+      "resim": "http://localhost:3000/img/ezogelin.jpg"
+    }
+  ],
+  "Ana Yemekler": [
+    {
+      "isim": "Tavuk Şiş",
+      "aciklama": "Izgara tavuk şiş, pilav ve salata ile",
+      "fiyat": 120,
+      "resim": "img/tavuksis.jpg"
+    },
+    {
+      "isim": "Kuzu Tandır",
+      "aciklama": "Fırında yavaş pişmiş kuzu eti",
+      "fiyat": 230,
+      "resim": "http://localhost:3000/img/kuzutandir.jpg"
+    }
+  ],
+  "Tatlılar": [
+    {
+      "isim": "Sütlaç",
+      "aciklama": "Fırında klasik sütlaç",
+      "fiyat": 40,
+      "resim": "img/sutlac.jpg"
+    },
+    {
+      "isim": "Künefe",
+      "aciklama": "Taze kadayıf ve peynir ile",
+      "fiyat": 60,
+      "resim": "img/kunefe.jpg"
+    }
+  ],
+  "İçecekler": [
+    {
+      "isim": "Ayran",
+      "aciklama": "Ev yapımı ayran",
+      "fiyat": 20,
+      "resim": "img/ayran.jpg"
+    }
+  ]
+}

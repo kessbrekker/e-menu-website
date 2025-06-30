@@ -1,0 +1,120 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #faf7f2;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    background: #b22222;
+    color: #fff;
+    padding: 2rem 1rem 1rem 1rem;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+}
+
+header p {
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+}
+
+main {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.menu-category {
+    margin-bottom: 2.5rem;
+}
+
+.menu-category h2 {
+    border-bottom: 2px solid #b22222;
+    padding-bottom: 0.3rem;
+    margin-bottom: 1rem;
+    color: #b22222;
+    font-size: 1.5rem;
+}
+
+.menu-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 1.2rem;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+    flex-shrink: 0;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.2s;
+    gap: 1rem;
+}
+
+.menu-item:hover {
+    box-shadow: 0 4px 16px rgba(178,34,34,0.15);
+}
+
+.menu-item h3 {
+    margin: 0 0 0.3rem 0;
+    font-size: 1.1rem;
+}
+
+.menu-item p {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.price {
+    font-weight: bold;
+    color: #b22222;
+    font-size: 1.1rem;
+    margin-left: 1.5rem;
+    white-space: nowrap;
+}
+
+footer {
+    text-align: center;
+    padding: 1.5rem 0 1rem 0;
+    background: #f3e9e1;
+    color: #b22222;
+    font-size: 1rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 600px) {
+    main {
+        padding: 0 0.3rem;
+    }
+    .menu-img {
+        width: 60px;
+        height: 60px;
+        margin-right: 0.7rem;
+        margin-bottom: 0.5rem;
+    }
+    .menu-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+    .price {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        align-self: flex-end;
+    }
+}
